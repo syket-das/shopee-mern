@@ -16,7 +16,7 @@
     "react": "^17.0.1",
     "react-alert": "^7.0.2",
     "react-alert-template-basic": "^1.0.0",
-    "react-bootstrap": "^1.4.0",
+    "react-bootstrap": "^1.6.4",
     "react-dom": "^17.0.1",
     "react-helmet": "^6.1.0",
     "react-js-pagination": "^3.0.3",
@@ -52,5 +52,4 @@
       "last 1 safari version"
     ]
   }
-  
 }
