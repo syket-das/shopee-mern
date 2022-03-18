@@ -32,7 +32,7 @@ const ProductReviews = () => {
             dispatch(clearErrors())
         }
 
-        if (productId !== '') {
+        if (productId !== '' && productId < 10) {
             dispatch(getProductReviews(productId))
         }
 
