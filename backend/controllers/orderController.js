@@ -101,8 +101,6 @@ exports.updateOrder = catchAsyncErrors(async (req, res, next) => {
 
 async function updateStock(id, quantity, order) {
   const product = await Product.findById(id);
-
-
   if (
     order.orderStatus !== 'Processing' &&
     order.orderStatus !== 'Shipped' &&
