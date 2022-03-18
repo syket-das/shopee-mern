@@ -1,5 +1,5 @@
 import React, { Fragment, useState, useEffect } from 'react'
-import { Carousel } from 'react-bootstrap'
+import { Carousel, Image } from 'react-bootstrap'
 
 import Loader from '../layout/Loader'
 import MetaData from '../layout/MetaData'
@@ -127,7 +127,7 @@ const ProductDetails = ({ match }) => {
                             <Carousel pause='hover'>
                                 {product.images && product.images.map(image => (
                                     <Carousel.Item key={image.public_id}>
-                                        <img className="d-block w-100" src={image.url} alt={product.title} />
+                                        <Image fluid style={{height: '450px'}} className="d-block w-100 rounded border" src={image.url} alt={product.title} />
                                     </Carousel.Item>
                                 ))}
                             </Carousel>
