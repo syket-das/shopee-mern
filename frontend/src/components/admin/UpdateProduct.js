@@ -23,17 +23,17 @@ const UpdateProduct = ({ match, history }) => {
 
     const categories = [
         'Electronics',
-        'Cameras',
-        'Laptops',
-        'Accessories',
-        'Headphones',
-        'Food',
-        "Books",
-        'Clothes/Shoes',
+        'Clothes',
+        'Shoes',
         'Beauty/Health',
+        'Medicine',
+        'Food',
         'Sports',
+        'Books',
         'Outdoor',
-        'Home'
+        'Accessories',
+        'Home',
+        'Others',
     ]
 
     const alert = useAlert();
