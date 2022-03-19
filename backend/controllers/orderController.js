@@ -82,17 +82,24 @@ exports.allOrders = catchAsyncErrors(async (req, res, next) => {
 exports.updateOrder = catchAsyncErrors(async (req, res, next) => {
   const order = await Order.findById(req.params.id);
 
-  if (order.orderStatus === 'Delivered') {
-    return next(new ErrorHandler('You have already delivered this order', 400));
+  if (req.body.paymentInfo && req.body.paymentInfo.status === 'succeeded') {
+    order.paidAt = Date.now();
+    order.paymentInfo.status = 'succeeded';
+    await order.save({ validateBeforeSave: false });
+  } else {
+    if (order.orderStatus === 'Delivered') {
+      return next(
+        new ErrorHandler('You have already delivered this order', 400)
+      );
+    }
+
+    order.orderItems.forEach(async (item) => {
+      await updateStock(item.product, item.quantity, order);
+    });
+
+    (order.orderStatus = req.body.status), (order.deliveredAt = Date.now());
+    await order.save();
   }
-
-  order.orderItems.forEach(async (item) => {
-    await updateStock(item.product, item.quantity, order);
-  });
-
-  (order.orderStatus = req.body.status), (order.deliveredAt = Date.now());
-
-  await order.save();
 
   res.status(200).json({
     success: true,
