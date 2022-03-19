@@ -74,7 +74,7 @@ const Payment = ({ history }) => {
       paymentInfo: {
         paymentMethod: 'Cash on Delivery',
         id: `${Math.round(Math.random() * 1000000000000) + Date.now()}`,
-        status: 'Pending',
+        status: 'pending',
       },
       user: user._id,
     };
