@@ -1,6 +1,6 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-
+import { Container } from 'react-bootstrap';
 import MetaData from '../layout/MetaData';
 import Loader from '../layout/Loader';
 import Sidebar from './Sidebar';
@@ -176,9 +176,11 @@ const ProcessOrder = ({ match }) => {
                 </div>
 
                 <div className="col-12 col-lg-3 mt-5">
-                  <h4 className="my-4">Status</h4>
+                  <Container>
+                    <h4 className="my-4">Status</h4>
+                  </Container>
 
-                  <div className="form-group">
+                  <Container className="form-group">
                     <select
                       className="form-control"
                       name="status"
@@ -189,14 +191,15 @@ const ProcessOrder = ({ match }) => {
                       <option value="Shipped">Shipped</option>
                       <option value="Delivered">Delivered</option>
                     </select>
-                  </div>
-
-                  <button
-                    className="btn btn-primary btn-block"
-                    onClick={() => updateOrderHandler(order)}
-                  >
-                    Update Status
-                  </button>
+                  </Container>
+                  <Container>
+                    <button
+                      className="btn btn-primary btn-block mb-3"
+                      onClick={() => updateOrderHandler(order)}
+                    >
+                      Update Status
+                    </button>
+                  </Container>
                 </div>
               </div>
             )}

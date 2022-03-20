@@ -89,6 +89,7 @@ const ListOrders = () => {
                     bordered
                     striped
                     hover
+                    responsiveSm
                 />
             )}
 

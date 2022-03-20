@@ -75,7 +75,7 @@ const OrderDetails = ({ match }) => {
                                             <p>${item.price}</p>
                                         </div>
 
-                                        <div className="col-4 col-lg-3 mt-4 mt-lg-0">
+                                        <div className="col-8 col-lg-3 mt-4 mt-lg-0">
                                             <p>{item.quantity} Piece(s)</p>
                                         </div>
                                     </div>

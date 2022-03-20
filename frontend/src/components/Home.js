@@ -75,7 +75,7 @@ const Home = ({ match }) => {
 
                             {keyword ? (
                                 <Fragment>
-                                    <div className="col-6 col-md-3 mt-5 mb-5">
+                                    <div className=" col-sm-12  col-md-3  mt-5 mb-5">
                                         <div className="px-5">
                                             <Range
                                                 marks={{
@@ -150,7 +150,7 @@ const Home = ({ match }) => {
                                         </div>
                                     </div>
 
-                                    <div className="col-6 col-md-9">
+                                    <div className="col-sm-12 col-md-9">
                                         <div className="row">
                                             {products.map(product => (
                                                 <Product key={product._id} product={product} col={4} />
