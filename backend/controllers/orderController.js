@@ -3,6 +3,7 @@ const Product = require('../models/product');
 
 const ErrorHandler = require('../utils/errorHandler');
 const catchAsyncErrors = require('../middlewares/catchAsyncErrors');
+const sendEmail = require('../utils/sendEmail');
 
 // Create a new order   =>  /api/v1/order/new
 exports.newOrder = catchAsyncErrors(async (req, res, next) => {
@@ -26,6 +27,39 @@ exports.newOrder = catchAsyncErrors(async (req, res, next) => {
     paymentInfo,
     paidAt: Date.now(),
     user: req.user._id,
+  });
+
+  const message = `
+    <h1 style="text-align:center;" >Thank you for your order!</h1>
+  \n
+
+  <h3 style="color: #0099ff;">Order Details</h3>
+  <p>Order ID: ${order._id}</p>
+  <p>Payment Status: ${order.paymentInfo.status}</p>
+  <br />
+  <h3>Total Price: ${order.totalPrice}</h3>
+
+  <hr />
+
+  ${orderItems.map((item) => {
+    return `
+      ${item.name} x ${item.quantity} = ${item.price * item.quantity}
+      `;
+  })}
+
+  <hr />
+
+
+  Thank you for shopping with us.
+\n
+  We will contact you soon.\n\n
+  
+  `;
+
+  await sendEmail({
+    email: req.user.email,
+    subject: 'Shopee - Order Recieved',
+    message,
   });
 
   res.status(200).json({
@@ -65,11 +99,20 @@ exports.myOrders = catchAsyncErrors(async (req, res, next) => {
 exports.allOrders = catchAsyncErrors(async (req, res, next) => {
   const orders = await Order.find();
 
+  // console.log(orders);
+
   let totalAmount = 0;
 
-  orders.forEach((order) => {
-    totalAmount += order.totalPrice;
+  const paidOrders = orders.filter((order) => {
+    if (order.paymentInfo.status === 'succeeded') {
+      totalAmount += order.totalPrice;
+      return order;
+    }
   });
+
+  // orders.forEach((order) => {
+  //   totalAmount += order.totalPrice;
+  // });
 
   res.status(200).json({
     success: true,

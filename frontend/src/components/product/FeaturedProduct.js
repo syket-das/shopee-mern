@@ -14,7 +14,6 @@ const FeaturedProduct = () => {
 
   featuredProducts = featuredProducts.slice(0, 4);
 
-
   return (
     <>
       {products.length > 0 ? (
