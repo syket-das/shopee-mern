@@ -80,7 +80,9 @@ const Payment = ({ history }) => {
     };
 
     dispatch(createOrder(orderData));
+    localStorage.removeItem('cartItems');
     history.push('/success');
+    window.location.reload();
   };
 
   const submitHandler = async (e) => {
@@ -130,7 +132,10 @@ const Payment = ({ history }) => {
 
           dispatch(createOrder(order));
 
+          localStorage.removeItem('cartItems');
+
           history.push('/success');
+          window.location.reload();
         } else {
           alert.error('There is some issue while payment processing');
         }
