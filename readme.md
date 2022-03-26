@@ -19,6 +19,7 @@ npm i
 
 Use the following commeand to put some dummy products in that database.
 Run it in the root folder.
+..
 
 ```
 npm run seeder
