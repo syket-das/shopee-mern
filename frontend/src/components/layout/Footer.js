@@ -78,7 +78,7 @@ const Footer = () => {
                   </div>
                   <ul>
                     <li>
-                      <Link to="#/">Home</Link>
+                      <Link to="/">Home</Link>
                     </li>
                     <li>
                       <Link to="#/">about</Link>
@@ -141,9 +141,13 @@ const Footer = () => {
                 <div class="copyright-text">
                   <p>
                     Copyright &copy; 2022, All Right Reserved |{' '}
-                    <Link to="https://www.syket-das.me/">
+                    <a
+                      target="_blank"
+                      rel="noreferrer"
+                      href="https://www.syket-das.me/"
+                    >
                       Developed By Syket
-                    </Link>
+                    </a>
                   </p>
                 </div>
               </div>
@@ -151,7 +155,7 @@ const Footer = () => {
                 <div class="footer-menu">
                   <ul>
                     <li>
-                      <Link to="#/">Home</Link>
+                      <Link to="/">Home</Link>
                     </li>
                     <li>
                       <Link to="#/">Terms</Link>

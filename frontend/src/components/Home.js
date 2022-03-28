@@ -73,7 +73,7 @@ const Home = ({ match }) => {
         <Loader />
       ) : (
         <Fragment>
-          <MetaData title={'Buy Best Products Online'} />
+          <MetaData title={'Shopee - Buy Best Products Online'} />
 
           {!keyword && <FeaturedProduct />}
 
