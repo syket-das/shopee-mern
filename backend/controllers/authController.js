@@ -11,7 +11,7 @@ const cloudinary = require('cloudinary');
 // Register a user   => /api/v1/register
 exports.registerUser = catchAsyncErrors(async (req, res, next) => {
   const result = await cloudinary.v2.uploader.upload(req.body.avatar, {
-    folder: 'avatars',
+    folder: 'shopee/avatars',
     width: 150,
     crop: 'scale',
   });
@@ -174,7 +174,7 @@ exports.updateProfile = catchAsyncErrors(async (req, res, next) => {
     const res = await cloudinary.v2.uploader.destroy(image_id);
 
     const result = await cloudinary.v2.uploader.upload(req.body.avatar, {
-      folder: 'avatars',
+      folder: 'shopee/avatars',
       width: 150,
       crop: 'scale',
     });
