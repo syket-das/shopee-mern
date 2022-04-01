@@ -44,7 +44,7 @@ const Footer = () => {
                   <div class="footer-logo">
                     <Link to="index.html">
                       <img
-                        src="https://i.ibb.co/QDy827D/ak-logo.png"
+                        src="/images/logo.png"
                         class="img-fluid"
                         alt="logo"
                       />

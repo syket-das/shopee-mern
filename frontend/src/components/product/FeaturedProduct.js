@@ -31,6 +31,7 @@ const FeaturedProduct = () => {
                   alt={product.name}
                   height="400px"
                   width="100%"
+                  style={{ objectFit: 'cover' }}
                 />
               </Link>
               <Carousel.Caption>
