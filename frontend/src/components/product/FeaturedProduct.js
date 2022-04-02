@@ -28,7 +28,7 @@ const FeaturedProduct = () => {
                   style={{
                     objectFit: 'cover',
                     minWidth: '100%',
-                    maxHeight: '400px',
+                    height: '400px',
                     borderRadius: '5px',
                     border: '1px solid #e3e3e3',
                   }}
