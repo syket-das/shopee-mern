@@ -29,15 +29,17 @@ const FeaturedProduct = () => {
                   className="d-block w-100"
                   src={product.images[0].url}
                   alt={product.name}
-                  height="400px"
-                  width="100%"
-                  style={{ objectFit: 'cover' }}
+                  style={{
+                    objectFit: 'cover',
+                    minWidth: '100%',
+                    maxHeight: '400px',
+                  }}
                 />
               </Link>
               <Carousel.Caption>
-                <h3 className="text-dark">{product.name}</h3>
+                <h3 className="text-dark">{product.name.substring(0,50)}...</h3>
                 <p className="text-dark">
-                  {product.description.substring(0, 100)}
+                  {product.description.substring(0, 100)}...
                 </p>
               </Carousel.Caption>
             </Carousel.Item>

@@ -17,7 +17,7 @@ const Product = ({ product, col }) => {
         />
         <div className="card-body d-flex flex-column">
           <h5 className="card-title">
-            <Link to={`/product/${product._id}`}>{product.name}</Link>
+            <Link to={`/product/${product._id}`}>{product.name.substring(0, 50)}..</Link>
           </h5>
           <div className="ratings mt-auto">
             <div className="rating-outer">
