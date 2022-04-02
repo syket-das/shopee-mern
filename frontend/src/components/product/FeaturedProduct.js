@@ -19,12 +19,8 @@ const FeaturedProduct = () => {
       {products.length > 0 ? (
         <Carousel className="my-3">
           {featuredProducts.map((product) => (
-            <Carousel.Item interval={1000} key={product._id}>
-              <Link
-                to={`/product/${product._id}`}
-                id="view_btn"
-                className="btn btn-block"
-              >
+            <Carousel.Item interval={2000} key={product._id}>
+              <Link to={`/product/${product._id}`}>
                 <img
                   className="d-block w-100"
                   src={product.images[0].url}
@@ -33,11 +29,15 @@ const FeaturedProduct = () => {
                     objectFit: 'cover',
                     minWidth: '100%',
                     maxHeight: '400px',
+                    borderRadius: '5px',
+                    border: '1px solid #e3e3e3',
                   }}
                 />
               </Link>
               <Carousel.Caption>
-                <h3 className="text-dark">{product.name.substring(0,50)}...</h3>
+                <h3 className="text-dark">
+                  {product.name.substring(0, 50)}...
+                </h3>
                 <p className="text-dark">
                   {product.description.substring(0, 100)}...
                 </p>
