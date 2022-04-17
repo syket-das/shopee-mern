@@ -34,11 +34,11 @@ const Header = () => {
             </Navbar.Brand>
           </Col>
 
-          <Col md={5} lg={6}>
+          <Col md={5} lg={5}>
             <Route render={({ history }) => <Search history={history} />} />
           </Col>
 
-          <Col md={2} className="">
+          <Col md={3} className="">
             <Link to="/cart" style={{ textDecoration: 'none' }}>
               <span id="cart" className="ml-3">
                 Cart
