@@ -1,26 +1,33 @@
-### Env Variables
+#	MERN STACK E-COMMERCE WEBSITE
 
-Add your config variables values in the config.env file in backend/config folder as shown in the course.
+[Shopee Mern](http://shopee-mern.herokuapp.com/) is an ecommerce website made with mern stack. This website has all the functionalities like;
 
-### Install Dependencies (Frontend)
+**Buy and sell products,**
+**search for products**
+**Filter products**
+**Rating**
+**Comment**
+**Cart**
+**Authentication**
+**Admin Panel**
+**Admin Control**
+**User Dashboard**
+**Pagination**
+**etc.**
 
-```
-cd frontend
-npm i
-```
+Tech Stack For [Shopee Mern](http://shopee-mern.herokuapp.com/) :
 
-### Install Dependencies (Backend)
-
-```
-npm i
-```
-
-### Seed Database
-
-Use the following commeand to put some dummy products in that database.
-Run it in the root folder.
-..
-
-```
-npm run seeder
-```
+ - Html
+ - CSS
+ - Javascript
+ - React js
+ - Node js
+ - MongoDB
+ - Express js
+ - Rest API
+ - React Bootstrap
+ - Bootstrap
+ - Stripe
+ - Heroku 
+ - ....
+ - Please Visit [HERE](http://shopee-mern.herokuapp.com/)  to access the web page
