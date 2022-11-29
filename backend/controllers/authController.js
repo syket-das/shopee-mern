@@ -7,28 +7,54 @@ const sendEmail = require('../utils/sendEmail');
 
 const crypto = require('crypto');
 const cloudinary = require('cloudinary');
+const {
+  PutObjectCommand,
+
+  DeleteObjectCommand,
+} = require('@aws-sdk/client-s3');
+const { s3Client } = require('../config/spaceConfig');
 
 // Register a user   => /api/v1/register
 exports.registerUser = catchAsyncErrors(async (req, res, next) => {
-  const result = await cloudinary.v2.uploader.upload(req.body.avatar, {
-    folder: 'shopee/avatars',
-    width: 150,
-    crop: 'scale',
-  });
-
+  const doc = req.files.avatar;
   const { name, email, password } = req.body;
 
-  const user = await User.create({
-    name,
-    email,
-    password,
-    avatar: {
-      public_id: result.public_id,
-      url: result.secure_url,
-    },
-  });
+  const bucketParams = {
+    Bucket: process.env.SPACE_NAME,
+    Key: `avatar/${Date.now() + '-' + doc.name}`,
+    Body: doc.data,
+    ACL: 'public-read',
+  };
 
-  sendToken(user, 200, res);
+  try {
+    if (!name || !email || !password) {
+      return next(new ErrorHandler('Please enter all fields', 400));
+    }
+
+    const data = await s3Client.send(new PutObjectCommand(bucketParams));
+
+    const user = await User.create({
+      name,
+      email,
+      password,
+      avatar: {
+        public_id: bucketParams.Key,
+        url: `https://shopee.nyc3.digitaloceanspaces.com/${bucketParams.Key}`,
+      },
+    });
+    sendToken(user, 200, res);
+  } catch (err) {
+    console.log(err);
+
+    const data = await s3Client.send(
+      new DeleteObjectCommand({
+        Bucket: process.env.SPACE_NAME,
+        Key: bucketParams.Key,
+      })
+    );
+
+    return next(new ErrorHandler(err.message, 500));
+  }
 });
 
 // Login User  =>  /a[i/v1/login
@@ -71,7 +97,9 @@ exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {
   await user.save({ validateBeforeSave: false });
 
   // Create reset password url
-  const resetUrl = `${req.protocol}://${req.get('host')}/password/reset/${resetToken}`;
+  const resetUrl = `${req.protocol}://${req.get(
+    'host'
+  )}/password/reset/${resetToken}`;
 
   const message = `Your password reset token is as follow:\n\n${resetUrl}\n\nIf you have not requested this email, then ignore it.`;
 
@@ -167,22 +195,43 @@ exports.updateProfile = catchAsyncErrors(async (req, res, next) => {
   };
 
   // Update avatar
-  if (req.body.avatar !== '') {
+  if (req.files.avatar !== '') {
     const user = await User.findById(req.user.id);
 
     const image_id = user.avatar.public_id;
-    const res = await cloudinary.v2.uploader.destroy(image_id);
 
-    const result = await cloudinary.v2.uploader.upload(req.body.avatar, {
-      folder: 'shopee/avatars',
-      width: 150,
-      crop: 'scale',
-    });
+    const doc = req.files.avatar;
 
-    newUserData.avatar = {
-      public_id: result.public_id,
-      url: result.secure_url,
+    const bucketParams = {
+      Bucket: process.env.SPACE_NAME,
+      Key: `avatar/${Date.now() + '-' + doc.name}`,
+      Body: doc.data,
+      ACL: 'public-read',
     };
+
+    try {
+      const deletePrev = await s3Client.send(
+        new DeleteObjectCommand({
+          Bucket: process.env.SPACE_NAME,
+          Key: image_id,
+        })
+      );
+      const data = await s3Client.send(new PutObjectCommand(bucketParams));
+
+      newUserData.avatar = {
+        public_id: bucketParams.Key,
+        url: `https://shopee.nyc3.digitaloceanspaces.com/${bucketParams.Key}`,
+      };
+    } catch (err) {
+      const data = await s3Client.send(
+        new DeleteObjectCommand({
+          Bucket: process.env.SPACE_NAME,
+          Key: bucketParams.Key,
+        })
+      );
+
+      return next(new ErrorHandler(err.message, 500));
+    }
   }
 
   const user = await User.findByIdAndUpdate(req.user.id, newUserData, {
@@ -268,7 +317,12 @@ exports.deleteUser = catchAsyncErrors(async (req, res, next) => {
 
   // Remove avatar from cloudinary
   const image_id = user.avatar.public_id;
-  await cloudinary.v2.uploader.destroy(image_id);
+  const deletePrev = await s3Client.send(
+    new DeleteObjectCommand({
+      Bucket: process.env.SPACE_NAME,
+      Key: image_id,
+    })
+  );
 
   await user.remove();
 

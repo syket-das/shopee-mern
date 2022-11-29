@@ -37,7 +37,7 @@ const Register = ({ history }) => {
 
     }, [dispatch, alert, isAuthenticated, error, history])
 
-    const submitHandler = (e) => {
+    const submitHandler = async (e) => {
         e.preventDefault();
 
         const formData = new FormData();
@@ -46,22 +46,26 @@ const Register = ({ history }) => {
         formData.set('password', password);
         formData.set('avatar', avatar);
 
-        dispatch(register(formData))
+       await dispatch(register(formData))
     }
 
     const onChange = e => {
         if (e.target.name === 'avatar') {
 
-            const reader = new FileReader();
+            // const reader = new FileReader();
 
-            reader.onload = () => {
-                if (reader.readyState === 2) {
-                    setAvatarPreview(reader.result)
-                    setAvatar(reader.result)
-                }
-            }
+            // reader.onload = () => {
+            //     if (reader.readyState === 2) {
+            //         setAvatarPreview(reader.result)
+            //         setAvatar(reader.result)
+            //     }
+            // }
 
-            reader.readAsDataURL(e.target.files[0])
+            // reader.readAsDataURL(e.target.files[0])
+
+            setAvatarPreview(URL.createObjectURL(e.target.files[0]))
+            setAvatar(e.target.files[0])
+
 
         } else {
             setUser({ ...user, [e.target.name]: e.target.value })
