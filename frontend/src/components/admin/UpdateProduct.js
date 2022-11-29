@@ -119,18 +119,12 @@ const UpdateProduct = ({ match, history }) => {
     setOldImages([]);
 
     files.forEach((file) => {
-      const reader = new FileReader();
+      setImagesPreview((oldArray) => [...oldArray, URL.createObjectURL(file)]);
+      setImages((oldArray) => [...oldArray, file]);
 
-      reader.onload = () => {
-        if (reader.readyState === 2) {
-          setImagesPreview((oldArray) => [...oldArray, reader.result]);
-          setImages((oldArray) => [...oldArray, reader.result]);
-        }
-      };
-
-      reader.readAsDataURL(file);
     });
   };
+
 
   return (
     <Fragment>

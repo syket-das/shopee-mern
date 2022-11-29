@@ -1,5 +1,10 @@
 const Product = require('../models/product');
+const {
+  PutObjectCommand,
 
+  DeleteObjectCommand,
+} = require('@aws-sdk/client-s3');
+const { s3Client } = require('../config/spaceConfig');
 const ErrorHandler = require('../utils/errorHandler');
 const catchAsyncErrors = require('../middlewares/catchAsyncErrors');
 const APIFeatures = require('../utils/apiFeatures');
@@ -7,23 +12,35 @@ const cloudinary = require('cloudinary');
 
 // Create new product   =>   /api/v1/admin/product/new
 exports.newProduct = catchAsyncErrors(async (req, res, next) => {
-  let images = [];
-  if (typeof req.body.images === 'string') {
-    images.push(req.body.images);
-  } else {
-    images = req.body.images;
-  }
+  const docs = req.files.images;
 
   let imagesLinks = [];
 
-  for (let i = 0; i < images.length; i++) {
-    const result = await cloudinary.v2.uploader.upload(images[i], {
-      folder: 'shopee/products',
-    });
+  for (let i = 0; i < docs.length; i++) {
+    const bucketParams = {
+      Bucket: process.env.SPACE_NAME,
+      Key: `products/${Date.now() + '-' + docs[i].name}`,
+      Body: docs[i].data,
+      ACL: 'public-read',
+    };
+
+    try {
+      const data = await s3Client.send(new PutObjectCommand(bucketParams));
+    } catch (err) {
+      console.log(err);
+
+      const data = await s3Client.send(
+        new DeleteObjectCommand({
+          Bucket: process.env.SPACE_NAME,
+          Key: bucketParams.Key,
+        })
+      );
+      return next(new ErrorHandler(err.message, 500));
+    }
 
     imagesLinks.push({
-      public_id: result.public_id,
-      url: result.secure_url,
+      public_id: bucketParams.Key,
+      url: `https://shopee.nyc3.digitaloceanspaces.com/${bucketParams.Key}`,
     });
   }
 
@@ -95,30 +112,46 @@ exports.updateProduct = catchAsyncErrors(async (req, res, next) => {
   }
 
   let images = [];
-  if (typeof req.body.images === 'string') {
-    images.push(req.body.images);
-  } else {
-    images = req.body.images;
-  }
 
-  if (images !== undefined) {
+  images = req.files.images;
+
+  if (req.files.images !== undefined) {
     // Deleting images associated with the product
     for (let i = 0; i < product.images.length; i++) {
-      const result = await cloudinary.v2.uploader.destroy(
-        product.images[i].public_id
+      const image_id = product.images[i].public_id;
+      const data = await s3Client.send(
+        new DeleteObjectCommand({
+          Bucket: process.env.SPACE_NAME,
+          Key: image_id,
+        })
       );
     }
 
     let imagesLinks = [];
 
     for (let i = 0; i < images.length; i++) {
-      const result = await cloudinary.v2.uploader.upload(images[i], {
-        folder: 'shopee/products',
-      });
+      const bucketParams = {
+        Bucket: process.env.SPACE_NAME,
+        Key: `products/${Date.now() + '-' + images[i].name}`,
+        Body: images[i].data,
+        ACL: 'public-read',
+      };
+
+      try {
+        const data = await s3Client.send(new PutObjectCommand(bucketParams));
+      } catch (err) {
+        const data = await s3Client.send(
+          new DeleteObjectCommand({
+            Bucket: process.env.SPACE_NAME,
+            Key: bucketParams.Key,
+          })
+        );
+        return next(new ErrorHandler(err.message, 500));
+      }
 
       imagesLinks.push({
-        public_id: result.public_id,
-        url: result.secure_url,
+        public_id: bucketParams.Key,
+        url: `https://shopee.nyc3.digitaloceanspaces.com/${bucketParams.Key}`,
       });
     }
 
@@ -147,8 +180,12 @@ exports.deleteProduct = catchAsyncErrors(async (req, res, next) => {
 
   // Deleting images associated with the product
   for (let i = 0; i < product.images.length; i++) {
-    const result = await cloudinary.v2.uploader.destroy(
-      product.images[i].public_id
+    const image_id = product.images[i].public_id;
+    const data = await s3Client.send(
+      new DeleteObjectCommand({
+        Bucket: process.env.SPACE_NAME,
+        Key: image_id,
+      })
     );
   }
 
