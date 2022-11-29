@@ -43,8 +43,6 @@ exports.registerUser = catchAsyncErrors(async (req, res, next) => {
     });
     sendToken(user, 200, res);
   } catch (err) {
-    console.log(err);
-
     const data = await s3Client.send(
       new DeleteObjectCommand({
         Bucket: process.env.SPACE_NAME,

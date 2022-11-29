@@ -55,6 +55,11 @@ const NewProduct = ({ history }) => {
   const submitHandler = (e) => {
     e.preventDefault();
 
+    if (images.length <= 1) {
+      alert.error('Please select at least 2 images');
+      return;
+    }
+
     const formData = new FormData();
     formData.set('name', name);
     formData.set('price', price);
@@ -82,7 +87,6 @@ const NewProduct = ({ history }) => {
     });
   };
 
-  console.log(images);
 
   return (
     <Fragment>
@@ -116,7 +120,7 @@ const NewProduct = ({ history }) => {
                 <div className="form-group">
                   <label htmlFor="price_field">Price</label>
                   <input
-                    type="text"
+                    type="number"
                     id="price_field"
                     className="form-control"
                     value={price}

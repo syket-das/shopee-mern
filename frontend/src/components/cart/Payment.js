@@ -102,7 +102,6 @@ const Payment = ({ history }) => {
 
       const clientSecret = res.data.client_secret;
 
-      console.log(clientSecret);
 
       if (!stripe || !elements) {
         return;

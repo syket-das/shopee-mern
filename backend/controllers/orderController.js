@@ -99,8 +99,6 @@ exports.myOrders = catchAsyncErrors(async (req, res, next) => {
 exports.allOrders = catchAsyncErrors(async (req, res, next) => {
   const orders = await Order.find();
 
-  // console.log(orders);
-
   let totalAmount = 0;
 
   const paidOrders = orders.filter((order) => {

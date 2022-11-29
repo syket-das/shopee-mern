@@ -8,7 +8,6 @@ const { s3Client } = require('../config/spaceConfig');
 const ErrorHandler = require('../utils/errorHandler');
 const catchAsyncErrors = require('../middlewares/catchAsyncErrors');
 const APIFeatures = require('../utils/apiFeatures');
-const cloudinary = require('cloudinary');
 
 // Create new product   =>   /api/v1/admin/product/new
 exports.newProduct = catchAsyncErrors(async (req, res, next) => {
@@ -27,8 +26,6 @@ exports.newProduct = catchAsyncErrors(async (req, res, next) => {
     try {
       const data = await s3Client.send(new PutObjectCommand(bucketParams));
     } catch (err) {
-      console.log(err);
-
       const data = await s3Client.send(
         new DeleteObjectCommand({
           Bucket: process.env.SPACE_NAME,
@@ -47,12 +44,31 @@ exports.newProduct = catchAsyncErrors(async (req, res, next) => {
   req.body.images = imagesLinks;
   req.body.user = req.user.id;
 
-  const product = await Product.create(req.body);
+  // const product = await Product.create(req.body);
 
-  res.status(201).json({
-    success: true,
-    product,
-  });
+  // res.status(201).json({
+  //   success: true,
+  //   product,
+  // });
+
+  try {
+    const product = await Product.create(req.body);
+    res.status(201).json({
+      success: true,
+      product,
+    });
+  } catch (err) {
+    imagesLinks.forEach(async (image) => {
+      const data = await s3Client.send(
+        new DeleteObjectCommand({
+          Bucket: process.env.SPACE_NAME,
+          Key: image.public_id,
+        })
+      );
+    });
+
+    return next(new ErrorHandler(err.message, 500));
+  }
 });
 
 // Get all products   =>   /api/v1/products?keyword=apple
@@ -113,61 +129,119 @@ exports.updateProduct = catchAsyncErrors(async (req, res, next) => {
 
   let images = [];
 
-  images = req.files.images;
+  // if (req.files.images) {
+  //   images = req.files.images;
+  //   // Deleting images associated with the product
+  //   for (let i = 0; i < product.images.length; i++) {
+  //     const image_id = product.images[i].public_id;
+  //     const data = await s3Client.send(
+  //       new DeleteObjectCommand({
+  //         Bucket: process.env.SPACE_NAME,
+  //         Key: image_id,
+  //       })
+  //     );
+  //   }
 
-  if (req.files.images !== undefined) {
-    // Deleting images associated with the product
-    for (let i = 0; i < product.images.length; i++) {
-      const image_id = product.images[i].public_id;
-      const data = await s3Client.send(
-        new DeleteObjectCommand({
-          Bucket: process.env.SPACE_NAME,
-          Key: image_id,
-        })
-      );
-    }
+  //   let imagesLinks = [];
 
-    let imagesLinks = [];
+  //   for (let i = 0; i < images.length; i++) {
+  //     const bucketParams = {
+  //       Bucket: process.env.SPACE_NAME,
+  //       Key: `products/${Date.now() + '-' + images[i].name}`,
+  //       Body: images[i].data,
+  //       ACL: 'public-read',
+  //     };
 
-    for (let i = 0; i < images.length; i++) {
-      const bucketParams = {
-        Bucket: process.env.SPACE_NAME,
-        Key: `products/${Date.now() + '-' + images[i].name}`,
-        Body: images[i].data,
-        ACL: 'public-read',
-      };
+  //     try {
+  //       const data = await s3Client.send(new PutObjectCommand(bucketParams));
+  //     } catch (err) {
+  //       const data = await s3Client.send(
+  //         new DeleteObjectCommand({
+  //           Bucket: process.env.SPACE_NAME,
+  //           Key: bucketParams.Key,
+  //         })
+  //       );
+  //       return next(new ErrorHandler(err.message, 500));
+  //     }
 
-      try {
-        const data = await s3Client.send(new PutObjectCommand(bucketParams));
-      } catch (err) {
+  //     imagesLinks.push({
+  //       public_id: bucketParams.Key,
+  //       url: `https://shopee.nyc3.digitaloceanspaces.com/${bucketParams.Key}`,
+  //     });
+  //   }
+
+  //   req.body.images = imagesLinks;
+  // }
+
+  //   product = await Product.findByIdAndUpdate(req.params, req.body, {
+  //     new: true,
+  //     runValidators: true,
+  //     useFindAndModify: false,
+  //   });
+
+  //   res.status(200).json({
+  //     success: true,
+  //     product,
+  //   });
+
+  try {
+    if (req.files?.images) {
+      images = req.files.images;
+      // Deleting images associated with the product
+      for (let i = 0; i < product.images.length; i++) {
+        const image_id = product.images[i].public_id;
         const data = await s3Client.send(
           new DeleteObjectCommand({
             Bucket: process.env.SPACE_NAME,
-            Key: bucketParams.Key,
+            Key: image_id,
           })
         );
-        return next(new ErrorHandler(err.message, 500));
       }
 
-      imagesLinks.push({
-        public_id: bucketParams.Key,
-        url: `https://shopee.nyc3.digitaloceanspaces.com/${bucketParams.Key}`,
-      });
+      let imagesLinks = [];
+
+      for (let i = 0; i < images.length; i++) {
+        const bucketParams = {
+          Bucket: process.env.SPACE_NAME,
+          Key: `products/${Date.now() + '-' + images[i].name}`,
+          Body: images[i].data,
+          ACL: 'public-read',
+        };
+
+        try {
+          const data = await s3Client.send(new PutObjectCommand(bucketParams));
+        } catch (err) {
+          const data = await s3Client.send(
+            new DeleteObjectCommand({
+              Bucket: process.env.SPACE_NAME,
+              Key: bucketParams.Key,
+            })
+          );
+          return next(new ErrorHandler(err.message, 500));
+        }
+
+        imagesLinks.push({
+          public_id: bucketParams.Key,
+          url: `https://shopee.nyc3.digitaloceanspaces.com/${bucketParams.Key}`,
+        });
+      }
+
+      req.body.images = imagesLinks;
     }
 
-    req.body.images = imagesLinks;
+    product = await Product.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+      useFindAndModify: false,
+    });
+
+    res.status(200).json({
+      success: true,
+      product,
+    });
+  } catch (err) {
+    return next(new ErrorHandler(err.message, 500));
   }
-
-  product = await Product.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-    runValidators: true,
-    useFindAndModify: false,
-  });
-
-  res.status(200).json({
-    success: true,
-    product,
-  });
 });
 
 // Delete Product   =>   /api/v1/admin/product/:id
@@ -250,8 +324,6 @@ exports.getProductReviews = catchAsyncErrors(async (req, res, next) => {
 // Delete Product Review   =>   /api/v1/reviews
 exports.deleteReview = catchAsyncErrors(async (req, res, next) => {
   const product = await Product.findById(req.query.productId);
-
-  console.log(product);
 
   const reviews = product.reviews.filter(
     (review) => review._id.toString() !== req.query.id.toString()

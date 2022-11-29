@@ -121,10 +121,8 @@ const UpdateProduct = ({ match, history }) => {
     files.forEach((file) => {
       setImagesPreview((oldArray) => [...oldArray, URL.createObjectURL(file)]);
       setImages((oldArray) => [...oldArray, file]);
-
     });
   };
-
 
   return (
     <Fragment>
@@ -158,7 +156,7 @@ const UpdateProduct = ({ match, history }) => {
                 <div className="form-group">
                   <label htmlFor="price_field">Price</label>
                   <input
-                    type="text"
+                    type="number"
                     id="price_field"
                     className="form-control"
                     value={price}
@@ -234,7 +232,7 @@ const UpdateProduct = ({ match, history }) => {
                   {oldImages &&
                     oldImages.map((img) => (
                       <img
-                        key={img}
+                        key={img.url}
                         src={img.url}
                         alt={img.url}
                         className="mt-3 mr-2"
