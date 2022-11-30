@@ -50,7 +50,9 @@ export const login = (email, password) => async (dispatch) => {
         'Content-Type': 'application/json',
 
       },
-      Credentials: 'include',
+      
+
+      withCredentials: true,
 
 
     };
@@ -84,7 +86,7 @@ export const register = (userData) => async (dispatch) => {
         
       },
 
-      Credentials: 'include',
+      withCredentials: true,
     };
 
     const { data } = await axios.post(
