@@ -5,7 +5,7 @@ import {
   SAVE_SHIPPING_INFO,
 } from '../constants/cartConstants';
 
-const baseUrl = 'https://shopee-mern-epe8c.ondigitalocean.app'
+const baseUrl = ''
 
 export const addItemToCart = (id, quantity) => async (dispatch, getState) => {
   const { data } = await axios.get(baseUrl + `/api/v1/product/${id}`);

@@ -32,7 +32,7 @@ import {
   CLEAR_ERRORS,
 } from '../constants/productConstants';
 
-const baseUrl = 'https://shopee-mern-epe8c.ondigitalocean.app';
+const baseUrl = '';
 
 export const getProducts =
   (keyword = '', currentPage = 1, price, category, rating = 0) =>
