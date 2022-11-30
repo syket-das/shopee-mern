@@ -52,7 +52,7 @@ export const login = (email, password) => async (dispatch) => {
       },
       
 
-      withCredentials: true,
+
 
 
     };
@@ -86,7 +86,7 @@ export const register = (userData) => async (dispatch) => {
         
       },
 
-      withCredentials: true,
+
     };
 
     const { data } = await axios.post(
