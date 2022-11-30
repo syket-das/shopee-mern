@@ -22,7 +22,7 @@ import {
   CLEAR_ERRORS,
 } from '../constants/orderConstants';
 
-const baseUrl = 'http://localhost:5000';
+const baseUrl = process.env.BASE_URL;
 
 export const createOrder = (order) => async (dispatch, getState) => {
   try {

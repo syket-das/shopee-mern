@@ -32,7 +32,7 @@ import {
   CLEAR_ERRORS,
 } from '../constants/productConstants';
 
-const baseUrl = 'http://localhost:5000';
+const baseUrl = process.env.BASE_URL;
 
 export const getProducts =
   (keyword = '', currentPage = 1, price, category, rating = 0) =>

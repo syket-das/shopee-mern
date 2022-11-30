@@ -5,7 +5,7 @@ import {
   SAVE_SHIPPING_INFO,
 } from '../constants/cartConstants';
 
-const baseUrl = 'http://localhost:5000';
+const baseUrl = process.env.BASE_URL;
 
 export const addItemToCart = (id, quantity) => async (dispatch, getState) => {
   const { data } = await axios.get(baseUrl + `/api/v1/product/${id}`);

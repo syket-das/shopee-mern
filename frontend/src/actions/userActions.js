@@ -38,7 +38,7 @@ import {
   CLEAR_ERRORS,
 } from '../constants/userConstants';
 
-const baseUrl = 'http://localhost:5000';
+const baseUrl = process.env.BASE_URL;
 
 // Login
 export const login = (email, password) => async (dispatch) => {
@@ -80,7 +80,11 @@ export const register = (userData) => async (dispatch) => {
       },
     };
 
-    const { data } = await axios.post(baseUrl+'/api/v1/register', userData, config);
+    const { data } = await axios.post(
+      baseUrl + '/api/v1/register',
+      userData,
+      config
+    );
 
     dispatch({
       type: REGISTER_USER_SUCCESS,
