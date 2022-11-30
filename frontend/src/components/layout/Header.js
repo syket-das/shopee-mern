@@ -29,7 +29,7 @@ const Header = () => {
           <Col md={4}>
             <Navbar.Brand className="navbar-brand">
               <Link to="/">
-                <Image src="/images/logo.png" />
+                <b>SHOPEE ECOMMERCE</b>
               </Link>
             </Navbar.Brand>
           </Col>

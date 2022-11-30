@@ -4,7 +4,7 @@
   "description": "full ecommerce site using mern",
   "main": "server.js",
   "scripts": {
-    "start": "npm install --prefix frontend && npm run build --prefix frontend && node backend/server.js",
+    "start": "node backend/server.js",
     "dev": "NODE_ENV=DEVELOPMENT nodemon backend/server",
     "prod": "NODE_ENV=PRODUCTION nodemon backend/server",
     "seeder": "node backend/utils/seeder.js",
