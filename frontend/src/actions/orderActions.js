@@ -22,7 +22,7 @@ import {
   CLEAR_ERRORS,
 } from '../constants/orderConstants';
 
-const baseUrl = process.env.BASE_URL;
+const baseUrl = 'https://shopee-mern-epe8c.ondigitalocean.app';
 
 export const createOrder = (order) => async (dispatch, getState) => {
   try {

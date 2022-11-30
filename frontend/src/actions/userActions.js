@@ -38,7 +38,7 @@ import {
   CLEAR_ERRORS,
 } from '../constants/userConstants';
 
-const baseUrl = process.env.BASE_URL;
+const baseUrl = 'https://shopee-mern-epe8c.ondigitalocean.app';
 
 // Login
 export const login = (email, password) => async (dispatch) => {
