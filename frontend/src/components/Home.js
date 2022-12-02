@@ -6,7 +6,6 @@ import 'rc-slider/assets/index.css';
 import MetaData from './layout/MetaData';
 import Product from './product/Product';
 import Loader from './layout/Loader';
-
 import { useDispatch, useSelector } from 'react-redux';
 import { useAlert } from 'react-alert';
 import { getProducts } from '../actions/productActions';

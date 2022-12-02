@@ -22,6 +22,8 @@ const Header = () => {
     alert.success('Logged out successfully.');
   };
 
+
+
   return (
     <Fragment>
       <Navbar className="w-100">
@@ -66,7 +68,7 @@ const Header = () => {
                       className="rounded-circle"
                     />
                   </figure>
-                  <span>{user && user.name}</span>
+                  <span>{user && String(user.name).split(' ')[0]}</span>
                 </Link>
 
                 <div
