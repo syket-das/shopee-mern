@@ -17,7 +17,11 @@ const Product = ({ product, col }) => {
         />
         <div className="card-body d-flex flex-column">
           <h5 className="card-title">
-            <Link to={`/product/${product._id}`}>{product.name.substring(0, 50)}..</Link>
+            <Link to={`/product/${product._id}`}>{
+              product.name.length > 15
+                ? product.name.substring(0, 15) + '...'
+                : product.name
+            }</Link>
           </h5>
           <div className="ratings mt-auto">
             <div className="rating-outer">
@@ -31,8 +35,8 @@ const Product = ({ product, col }) => {
           <p className="card-text">${product.price}</p>
           <Link
             to={`/product/${product._id}`}
-            id="view_btn"
-            className="btn btn-block"
+            // id="view_btn"
+            className="btn btn-outline-primary"
           >
             View Details
           </Link>

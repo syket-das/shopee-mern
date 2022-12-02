@@ -58,7 +58,7 @@ const Header = () => {
               <span id="cart" className="ml-3">
                 Cart
               </span>
-              <span className="ml-1" id="cart_count">
+              <span className="ml-1 bg-success" id="cart_count">
                 {cartItems.length}
               </span>
             </Link>

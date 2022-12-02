@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
+import {Button} from 'react-bootstrap';
 
 import MetaData from '../layout/MetaData';
 import CheckoutSteps from './CheckoutSteps';
@@ -35,7 +36,7 @@ const ConfirmOrder = ({ history }) => {
     <Fragment>
       <MetaData title={'Confirm Order'} />
 
-      <CheckoutSteps shipping confirmOrder />
+      <CheckoutSteps shipping confirmOrder  />
 
       <div className="row d-flex justify-content-between">
         <div className="col-12 col-lg-8 mt-5 order-confirm">
@@ -103,13 +104,13 @@ const ConfirmOrder = ({ history }) => {
             </p>
 
             <hr />
-            <button
-              id="checkout_btn"
-              className="btn btn-primary btn-block"
+            <Button
+              
+              className="btn btn-success btn-block"
               onClick={processToPayment}
             >
               Proceed to Payment
-            </button>
+            </Button>
           </div>
         </div>
       </div>

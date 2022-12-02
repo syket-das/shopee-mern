@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Carousel } from 'react-bootstrap';
+import { Carousel, Image } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 import { useDispatch, useSelector } from 'react-redux';
@@ -19,9 +19,9 @@ const FeaturedProduct = () => {
       {products.length > 0 ? (
         <Carousel className="my-3">
           {featuredProducts.map((product) => (
-            <Carousel.Item interval={2000} key={product._id}>
+            <Carousel.Item interval={4000} key={product._id}>
               <Link to={`/product/${product._id}`}>
-                <img
+                <Image
                   className="d-block w-100"
                   src={product.images[0].url}
                   alt={product.name}
@@ -29,17 +29,22 @@ const FeaturedProduct = () => {
                     objectFit: 'cover',
                     minWidth: '100%',
                     height: '400px',
-                    borderRadius: '5px',
                     border: '1px solid #e3e3e3',
                   }}
                 />
               </Link>
               <Carousel.Caption>
-                <h3 className="text-dark">
-                  {product.name.substring(0, 50)}...
+                <h3 className="text-danger">
+                  {product.name.length > 50
+                    ? product.name.substring(0, 50) + '...'
+                    : product.name}
                 </h3>
                 <p className="text-dark">
-                  {product.description.substring(0, 100)}...
+                  {product.description.length > 100 ? (
+                    <b> {product.description.substring(0, 100) + '...'}</b>
+                  ) : (
+                    <b>{product.description}</b>
+                  )}
                 </p>
               </Carousel.Caption>
             </Carousel.Item>

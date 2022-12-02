@@ -1,8 +1,10 @@
 import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 
+import {BsFillTrashFill} from 'react-icons/bs'
+
 import MetaData from '../layout/MetaData';
-import { Container, Row } from 'react-bootstrap';
+import { Container, Row,Button } from 'react-bootstrap';
 import { useAlert } from 'react-alert';
 import { useDispatch, useSelector } from 'react-redux';
 import { addItemToCart, removeItemFromCart } from '../../actions/cartActions';
@@ -65,9 +67,7 @@ const Cart = ({ history }) => {
                       </div>
 
                       <div className="col-5 col-lg-3">
-                        <Link to={`/product/${item.product}`}>
-                          {item.name}
-                        </Link>
+                        <Link to={`/product/${item.product}`}>{item.name}</Link>
                       </div>
 
                       <div className="col-4 col-lg-2 mt-4 mt-lg-0">
@@ -75,7 +75,7 @@ const Cart = ({ history }) => {
                       </div>
 
                       <div className="col-4 col-lg-3 mt-4 mt-lg-0">
-                        <div className="stockCounter d-inline d-flex flex-1">
+                        <div className=" d-inline d-flex flex-1">
                           <span
                             className="btn btn-danger minus"
                             onClick={() =>
@@ -87,7 +87,7 @@ const Cart = ({ history }) => {
 
                           <input
                             type="number"
-                            className="form-control count d-inline"
+                            className="form-control count d-inline text-center"
                             value={item.quantity}
                             readOnly
                           />
@@ -107,12 +107,16 @@ const Cart = ({ history }) => {
                         </div>
                       </div>
 
-                      <div className="col-4 col-lg-1 mt-4 mt-lg-0">
-                        <i
-                          id="delete_cart_item"
-                          className="fa fa-trash btn btn-danger"
+                      <div className="col-4 col-lg-1 mt-4 mt-lg-0 d-flex align-items-center">
+                  
+                        <BsFillTrashFill
+                          className=" "
+                          style={{
+                            fontSize: '25px',
+                            cursor: 'pointer',
+                          }}
                           onClick={() => removeCartItemHandler(item.product)}
-                        ></i>
+                        />
                       </div>
                     </div>
                   </div>
@@ -149,13 +153,13 @@ const Cart = ({ history }) => {
                 </p>
 
                 <hr />
-                <button
-                  id="checkout_btn"
-                  className="btn btn-primary btn-block"
+                <Button
+                  id=""
+                  className="btn btn-success btn-block"
                   onClick={checkoutHandler}
                 >
                   Check out
-                </button>
+                </Button>
               </div>
             </div>
           </div>

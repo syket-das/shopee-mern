@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { InputGroup, Form, Button } from 'react-bootstrap';
+import {BiSearchAlt} from 'react-icons/bi';
 const Search = ({ history }) => {
   const [keyword, setKeyword] = useState('');
 
@@ -35,7 +36,11 @@ const Search = ({ history }) => {
               justifyContent: 'center',
             }}
           >
-            Search
+            <BiSearchAlt style={{
+              height: '20px',
+              width: '20px',
+              
+            }} />
           </Button>
         </div>
       </InputGroup>

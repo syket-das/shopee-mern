@@ -1,9 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import {Container} from 'react-bootstrap';
 
 const CheckoutSteps = ({ shipping, confirmOrder, payment }) => {
   return (
-    <div className='d-flex justify-content-center'>
+    <Container className='d-flex justify-content-center'>
       <div className="checkout-progress  mt-5 container ">
         {shipping ? (
           <Link to="shipping" className="">
@@ -47,7 +48,7 @@ const CheckoutSteps = ({ shipping, confirmOrder, payment }) => {
           </Link>
         )}
       </div>
-    </div>
+    </Container>
   );
 };
 

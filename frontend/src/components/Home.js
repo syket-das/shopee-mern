@@ -11,6 +11,8 @@ import { useAlert } from 'react-alert';
 import { getProducts } from '../actions/productActions';
 import FeaturedProduct from './product/FeaturedProduct';
 
+import { Container, Row, Col } from 'react-bootstrap';
+
 const { createSliderWithTooltip } = Slider;
 const Range = createSliderWithTooltip(Slider.Range);
 
@@ -76,13 +78,15 @@ const Home = ({ match }) => {
 
           {!keyword && <FeaturedProduct />}
 
-          <h1 id="products_heading">Latest Products</h1>
+          <h1 className="text-center" id="products_heading">
+            Latest Products
+          </h1>
 
-          <section id="products" className="container mt-5">
-            <div className="row">
+          <Container id="products" className=" mt-5">
+            <Row className="row">
               {keyword ? (
                 <Fragment>
-                  <div className=" col-sm-12  col-md-3  mt-5 mb-5">
+                  <Col sm={12} md={3} className="   mt-5 mb-5">
                     <div className="px-5">
                       <Range
                         marks={{
@@ -150,23 +154,24 @@ const Home = ({ match }) => {
                         </ul>
                       </div>
                     </div>
-                  </div>
+                  </Col>
 
-                  <div className="col-sm-12 col-md-9">
-                    <div className="row">
+                  <Col sm={12} md={9}>
+                    <Row
+                    >
                       {products.map((product) => (
                         <Product key={product._id} product={product} col={4} />
                       ))}
-                    </div>
-                  </div>
+                    </Row>
+                  </Col>
                 </Fragment>
               ) : (
                 products.map((product) => (
                   <Product key={product._id} product={product} col={3} />
                 ))
               )}
-            </div>
-          </section>
+            </Row>
+          </Container>
 
           {resPerPage <= count && (
             <div className="d-flex justify-content-center mt-5">
