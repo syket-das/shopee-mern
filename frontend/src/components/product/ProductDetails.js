@@ -1,5 +1,6 @@
 import React, { Fragment, useState, useEffect } from 'react';
-import { Carousel, Image, Button } from 'react-bootstrap';
+import { Carousel, Image, Button, Row, Container } from 'react-bootstrap';
+import ReactImageMagnify from 'react-image-magnify';
 
 import Loader from '../layout/Loader';
 import MetaData from '../layout/MetaData';
@@ -14,6 +15,7 @@ import {
 } from '../../actions/productActions';
 import { addItemToCart } from '../../actions/cartActions';
 import { NEW_REVIEW_RESET } from '../../constants/productConstants';
+import Product from './Product';
 
 const ProductDetails = ({ match }) => {
   const [quantity, setQuantity] = useState(1);
@@ -23,9 +25,12 @@ const ProductDetails = ({ match }) => {
   const dispatch = useDispatch();
   const alert = useAlert();
 
-  const { loading, error, product } = useSelector(
-    (state) => state.productDetails
-  );
+  const {
+    loading,
+    error,
+    product,
+    similarProducts = [],
+  } = useSelector((state) => state.productDetails);
   const { user } = useSelector((state) => state.auth);
   const { error: reviewError, success } = useSelector(
     (state) => state.newReview
@@ -134,12 +139,37 @@ const ProductDetails = ({ match }) => {
                 {product.images &&
                   product.images.map((image) => (
                     <Carousel.Item key={image.public_id}>
-                      <Image
+                      {/* <Image
                         fluid
-                        style={{ height: '450px' }}
+                        style={{ maxHeight: '400px' }}
                         className="d-block w-100 rounded border"
                         src={image.url}
                         alt={product.title}
+                      /> */}
+                      <ReactImageMagnify
+                        {...{
+                          smallImage: {
+                            alt: 'Wristwatch by Ted Baker London',
+                            isFluidWidth: true,
+                            src: image.url,
+                          },
+                          largeImage: {
+                            src: image.url,
+                            width: 1200,
+                            height: 1800,
+                          },
+
+                          isHintEnabled: true,
+                          shouldHideHintAfterFirstActivation: false,
+
+                          enlargedImagePosition: 'over',
+
+                          isActivatedOnTouch: true,
+
+                          imageClassName: 'img-fluid',
+
+                          enlargedImageContainerClassName: 'img-fluid',
+                        }}
                       />
                     </Carousel.Item>
                   ))}
@@ -242,7 +272,6 @@ const ProductDetails = ({ match }) => {
                             Submit Review
                           </h5>
                           <Button
-                           
                             className="btn-danger"
                             data-dismiss="modal"
                             aria-label="Close"
@@ -294,9 +323,25 @@ const ProductDetails = ({ match }) => {
             </div>
           </div>
 
-          {product.reviews && product.reviews.length > 0 && (
-            <ListReviews reviews={product.reviews} />
-          )}
+          <Container>
+            <h3 className="text-center mt-4">Similar Products</h3>
+
+            <Row>
+              {similarProducts.map((product) => (
+                <Product
+                  key={product._id}
+                  product={product}
+                  col={4}
+                  small={true}
+                />
+              ))}
+            </Row>
+          </Container>
+          <Container>
+            {product.reviews && product.reviews.length > 0 && (
+              <ListReviews reviews={product.reviews} />
+            )}
+          </Container>
         </Fragment>
       )}
     </Fragment>

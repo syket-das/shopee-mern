@@ -4,6 +4,7 @@ import App from './App';
 import "bootswatch/dist/lux/bootstrap.min.css";
 import { Provider } from 'react-redux'
 import store from './store'
+import 'netslider/dist/styles.min.css';
 
 import { positions, transitions, Provider as AlertProvider } from 'react-alert';
 import AlertTemplate from 'react-alert-template-basic'

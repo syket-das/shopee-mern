@@ -109,6 +109,12 @@ exports.getAdminProducts = catchAsyncErrors(async (req, res, next) => {
 exports.getSingleProduct = catchAsyncErrors(async (req, res, next) => {
   const product = await Product.findById(req.params.id);
 
+  const similarProducts = await Product.find({
+    category: product.category,
+  })
+    .limit(6)
+   
+
   if (!product) {
     return next(new ErrorHandler('Product not found', 404));
   }
@@ -116,6 +122,7 @@ exports.getSingleProduct = catchAsyncErrors(async (req, res, next) => {
   res.status(200).json({
     success: true,
     product,
+    similarProducts,
   });
 });
 
@@ -129,60 +136,6 @@ exports.updateProduct = catchAsyncErrors(async (req, res, next) => {
 
   let images = [];
 
-  // if (req.files.images) {
-  //   images = req.files.images;
-  //   // Deleting images associated with the product
-  //   for (let i = 0; i < product.images.length; i++) {
-  //     const image_id = product.images[i].public_id;
-  //     const data = await s3Client.send(
-  //       new DeleteObjectCommand({
-  //         Bucket: process.env.SPACE_NAME,
-  //         Key: image_id,
-  //       })
-  //     );
-  //   }
-
-  //   let imagesLinks = [];
-
-  //   for (let i = 0; i < images.length; i++) {
-  //     const bucketParams = {
-  //       Bucket: process.env.SPACE_NAME,
-  //       Key: `products/${Date.now() + '-' + images[i].name}`,
-  //       Body: images[i].data,
-  //       ACL: 'public-read',
-  //     };
-
-  //     try {
-  //       const data = await s3Client.send(new PutObjectCommand(bucketParams));
-  //     } catch (err) {
-  //       const data = await s3Client.send(
-  //         new DeleteObjectCommand({
-  //           Bucket: process.env.SPACE_NAME,
-  //           Key: bucketParams.Key,
-  //         })
-  //       );
-  //       return next(new ErrorHandler(err.message, 500));
-  //     }
-
-  //     imagesLinks.push({
-  //       public_id: bucketParams.Key,
-  //       url: `https://shopee.nyc3.digitaloceanspaces.com/${bucketParams.Key}`,
-  //     });
-  //   }
-
-  //   req.body.images = imagesLinks;
-  // }
-
-  //   product = await Product.findByIdAndUpdate(req.params, req.body, {
-  //     new: true,
-  //     runValidators: true,
-  //     useFindAndModify: false,
-  //   });
-
-  //   res.status(200).json({
-  //     success: true,
-  //     product,
-  //   });
 
   try {
     if (req.files?.images) {
