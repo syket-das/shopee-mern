@@ -7,6 +7,7 @@ const Product = ({ product, col, small }) => {
     <div className={`col-sm-12 col-md-6 col-lg-${col} my-3`}>
       <div className="card p-3 rounded">
         <Image
+        loading='lazy'
           fluid
           style={{
             height: small ? '100px' : '200px',

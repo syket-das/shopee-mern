@@ -306,11 +306,7 @@ footer {
   padding: 0.1rem 0.5rem;
 }
 
-.stockCounter input::-webkit-outer-spin-button,
-.stockCounter input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
+
 
 .form-control:disabled,
 .form-control[readonly] {

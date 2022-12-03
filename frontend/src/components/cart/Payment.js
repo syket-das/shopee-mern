@@ -245,7 +245,7 @@ const Payment = ({ history }) => {
                         onClick={cashOnDeliveryHandler}
                         className="p-3 uni_btn"
                       >
-                        <i class="fa fa-money mr-2"></i>
+                        <i className="fa fa-money mr-2"></i>
                         Confirm Order{` - ${orderInfo && orderInfo.totalPrice}`}
                       </Button>
                     </Card>
