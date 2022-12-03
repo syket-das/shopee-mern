@@ -1,6 +1,5 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import { Carousel, Image, Button, Row, Container } from 'react-bootstrap';
-import ReactImageMagnify from 'react-image-magnify';
 
 import Loader from '../layout/Loader';
 import MetaData from '../layout/MetaData';
@@ -139,38 +138,14 @@ const ProductDetails = ({ match }) => {
                 {product.images &&
                   product.images.map((image) => (
                     <Carousel.Item key={image.public_id}>
-                      {/* <Image
+                      <Image
                         fluid
                         style={{ maxHeight: '400px' }}
                         className="d-block w-100 rounded border"
                         src={image.url}
                         alt={product.title}
-                      /> */}
-                      <ReactImageMagnify
-                        {...{
-                          smallImage: {
-                            alt: 'Wristwatch by Ted Baker London',
-                            isFluidWidth: true,
-                            src: image.url,
-                          },
-                          largeImage: {
-                            src: image.url,
-                            width: 1200,
-                            height: 1800,
-                          },
-
-                          isHintEnabled: true,
-                          shouldHideHintAfterFirstActivation: false,
-
-                          enlargedImagePosition: 'over',
-
-                          isActivatedOnTouch: true,
-
-                          imageClassName: 'img-fluid',
-
-                          enlargedImageContainerClassName: 'img-fluid',
-                        }}
                       />
+                 
                     </Carousel.Item>
                   ))}
               </Carousel>
