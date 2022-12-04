@@ -15,6 +15,7 @@ import {
 import { addItemToCart } from '../../actions/cartActions';
 import { NEW_REVIEW_RESET } from '../../constants/productConstants';
 import Product from './Product';
+import Skeleton from 'react-loading-skeleton';
 
 const ProductDetails = ({ match }) => {
   const [quantity, setQuantity] = useState(1);
@@ -34,6 +35,16 @@ const ProductDetails = ({ match }) => {
   const { error: reviewError, success } = useSelector(
     (state) => state.newReview
   );
+
+  const [loadedImg, setLoadedImg] = useState(false);
+
+  useEffect(() => {
+    if (loading) {
+      setTimeout(() => {
+        setLoadedImg(true);
+      }, 1000);
+    }
+  }, [loading]);
 
   useEffect(() => {
     dispatch(getProductDetails(match.params.id));
@@ -127,13 +138,14 @@ const ProductDetails = ({ match }) => {
 
   return (
     <Fragment>
-      {loading ? (
+      {/* {loading ? (
         <Loader />
-      ) : (
-        <Fragment>
-          <MetaData title={product.name} />
-          <div className="row d-flex justify-content-around">
-            <div className="col-12 col-lg-5 img-fluid" id="product_image">
+      ) : ( */}
+      <Fragment>
+        <MetaData title={product.name} />
+        <div className="row d-flex justify-content-around">
+          <div className="col-12 col-lg-5 img-fluid" id="product_image">
+            {loadedImg ? (
               <Carousel pause="hover">
                 {product.images &&
                   product.images.map((image) => (
@@ -145,30 +157,51 @@ const ProductDetails = ({ match }) => {
                         src={image.url}
                         alt={product.title}
                       />
-                 
                     </Carousel.Item>
                   ))}
               </Carousel>
-            </div>
+            ) : (
+              <Skeleton height={400} />
+            )}
+          </div>
 
-            <div className="col-12 col-lg-5 mt-5">
+          <div className="col-12 col-lg-5 mt-5">
+            {loadedImg ? (
               <h3>{product.name}</h3>
+            ) : (
+              <Skeleton count={2} height={30} />
+            )}
+
+            {loadedImg ? (
               <p id="product_id">Product # {product._id}</p>
+            ) : (
+              <Skeleton count={1} height={10} width={250} />
+            )}
 
-              <hr />
+            <hr />
 
-              <div className="rating-outer">
-                <div
-                  className="rating-inner"
-                  style={{ width: `${(product.ratings / 5) * 100}%` }}
-                ></div>
-              </div>
-              <span id="no_of_reviews">({product.numOfReviews} Reviews)</span>
+            {loadedImg ? (
+              <>
+                <div className="rating-outer">
+                  <div
+                    className="rating-inner"
+                    style={{ width: `${(product.ratings / 5) * 100}%` }}
+                  ></div>
+                </div>
+                <span id="no_of_reviews">({product.numOfReviews} Reviews)</span>
+              </>
+            ) : (
+              <Skeleton count={1} height={10} width={250} />
+            )}
+            <hr />
 
-              <hr />
-
+            {loadedImg ? (
               <p id="product_price">${product.price}</p>
-              <div className="d-flex justify-content-between">
+            ) : (
+              <Skeleton count={1} height={30} width={150} />
+            )}
+            <div className="d-flex justify-content-between">
+              {loadedImg ? (
                 <div className="d-flex w-50">
                   <span className="btn btn-danger minus" onClick={decreaseQty}>
                     -
@@ -185,6 +218,10 @@ const ProductDetails = ({ match }) => {
                     +
                   </span>
                 </div>
+              ) : (
+                <Skeleton count={1} height={40} width={250} />
+              )}
+              {loadedImg ? (
                 <Button
                   className="btn btn-success d-inline ml-4"
                   disabled={product.stock === 0}
@@ -192,10 +229,14 @@ const ProductDetails = ({ match }) => {
                 >
                   Add to Cart
                 </Button>
-              </div>
+              ) : (
+                <Skeleton count={1} height={40} width={100} />
+              )}
+            </div>
 
-              <hr />
+            <hr />
 
+            {loadedImg ? (
               <p>
                 Status:{' '}
                 <span
@@ -205,91 +246,109 @@ const ProductDetails = ({ match }) => {
                   {product.stock > 0 ? 'In Stock' : 'Out of Stock'}
                 </span>
               </p>
+            ) : (
+              <Skeleton count={1} height={20} width={150} />
+            )}
 
-              <hr />
+            <hr />
 
+            {loadedImg ? (
               <h4 className="mt-2">Description:</h4>
+            ) : (
+              <Skeleton count={1} height={40} width={200} />
+            )}
+            {loadedImg ? (
               <p>{product.description}</p>
-              <hr />
+            ) : (
+              <Skeleton count={3} height={30} />
+            )}
+            <hr />
+            {loadedImg ? (
               <p id="product_seller mb-3">
                 Sold by: <strong>{product.seller}</strong>
               </p>
+            ) : (
+              <Skeleton count={1} height={20} width={150} />
+            )}
 
-              {user ? (
-                <Button
+            {user ? (
+              <>
+               {loadedImg? <Button
                   className="btn btn-success mt-4"
                   data-toggle="modal"
                   data-target="#ratingModal"
                   onClick={setUserRatings}
                 >
                   Submit Your Review
-                </Button>
-              ) : (
-                <div className="alert alert-danger mt-5" type="alert">
-                  Login to post your review.
-                </div>
-              )}
+                </Button>:(
+                  <Skeleton count={1} height={50} width={200} />  
+                )}
+              </>
+            ) : (
+              <div className="alert alert-danger mt-5" type="alert">
+                Login to post your review.
+              </div>
+            )}
 
-              <div className="row mt-2 mb-5">
-                <div className="rating w-50">
-                  <div
-                    className="modal fade"
-                    id="ratingModal"
-                    tabIndex="-1"
-                    role="dialog"
-                    aria-labelledby="ratingModalLabel"
-                    aria-hidden="true"
-                  >
-                    <div className="modal-dialog" role="document">
-                      <div className="modal-content">
-                        <div className="modal-header">
-                          <h5 className="modal-title" id="ratingModalLabel">
-                            Submit Review
-                          </h5>
-                          <Button
-                            className="btn-danger"
-                            data-dismiss="modal"
-                            aria-label="Close"
-                          >
-                            <span aria-hidden="true">&times;</span>
-                          </Button>
-                        </div>
-                        <div className="modal-body">
-                          <ul className="stars">
-                            <li className="star">
-                              <i className="fa fa-star"></i>
-                            </li>
-                            <li className="star">
-                              <i className="fa fa-star"></i>
-                            </li>
-                            <li className="star">
-                              <i className="fa fa-star"></i>
-                            </li>
-                            <li className="star">
-                              <i className="fa fa-star"></i>
-                            </li>
-                            <li className="star">
-                              <i className="fa fa-star"></i>
-                            </li>
-                          </ul>
+            <div className="row mt-2 mb-5">
+              <div className="rating w-50">
+                <div
+                  className="modal fade"
+                  id="ratingModal"
+                  tabIndex="-1"
+                  role="dialog"
+                  aria-labelledby="ratingModalLabel"
+                  aria-hidden="true"
+                >
+                  <div className="modal-dialog" role="document">
+                    <div className="modal-content">
+                      <div className="modal-header">
+                        <h5 className="modal-title" id="ratingModalLabel">
+                          Submit Review
+                        </h5>
+                        <Button
+                          className="btn-danger"
+                          data-dismiss="modal"
+                          aria-label="Close"
+                        >
+                          <span aria-hidden="true">&times;</span>
+                        </Button>
+                      </div>
+                      <div className="modal-body">
+                        <ul className="stars">
+                          <li className="star">
+                            <i className="fa fa-star"></i>
+                          </li>
+                          <li className="star">
+                            <i className="fa fa-star"></i>
+                          </li>
+                          <li className="star">
+                            <i className="fa fa-star"></i>
+                          </li>
+                          <li className="star">
+                            <i className="fa fa-star"></i>
+                          </li>
+                          <li className="star">
+                            <i className="fa fa-star"></i>
+                          </li>
+                        </ul>
 
-                          <textarea
-                            name="review"
-                            id="review"
-                            className="form-control mt-3"
-                            value={comment}
-                            onChange={(e) => setComment(e.target.value)}
-                          ></textarea>
+                        <textarea
+                          name="review"
+                          id="review"
+                          className="form-control mt-3"
+                          value={comment}
+                          onChange={(e) => setComment(e.target.value)}
+                        ></textarea>
 
-                          <Button
-                            className="btn btn-success my-3 float-right  px-4 text-white"
-                            onClick={reviewHandler}
-                            data-dismiss="modal"
-                            aria-label="Close"
-                          >
-                            Submit
-                          </Button>
-                        </div>
+                        <Button
+                          className="btn btn-success my-3 float-right  px-4 text-white"
+                          onClick={reviewHandler}
+                          data-dismiss="modal"
+                          aria-label="Close"
+                        >
+                          Submit
+                        </Button>
                       </div>
                     </div>
                   </div>
@@ -297,28 +356,29 @@ const ProductDetails = ({ match }) => {
               </div>
             </div>
           </div>
+        </div>
 
-          <Container>
-            <h3 className="text-center mt-4">Similar Products</h3>
+        <Container>
+          <h3 className="text-center mt-4">Similar Products</h3>
 
-            <Row>
-              {similarProducts.map((product) => (
-                <Product
-                  key={product._id}
-                  product={product}
-                  col={4}
-                  small={true}
-                />
-              ))}
-            </Row>
-          </Container>
-          <Container>
-            {product.reviews && product.reviews.length > 0 && (
-              <ListReviews reviews={product.reviews} />
-            )}
-          </Container>
-        </Fragment>
-      )}
+          <Row>
+            {similarProducts.map((product) => (
+              <Product
+                key={product._id}
+                product={product}
+                col={4}
+                small={true}
+              />
+            ))}
+          </Row>
+        </Container>
+        <Container>
+          {product.reviews && product.reviews.length > 0 && (
+            <ListReviews reviews={product.reviews} />
+          )}
+        </Container>
+      </Fragment>
+      {/* )} */}
     </Fragment>
   );
 };
