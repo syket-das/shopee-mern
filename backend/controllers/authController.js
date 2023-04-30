@@ -38,7 +38,7 @@ exports.registerUser = catchAsyncErrors(async (req, res, next) => {
       password,
       avatar: {
         public_id: bucketParams.Key,
-        url: `https://shopee.nyc3.digitaloceanspaces.com/${bucketParams.Key}`,
+        url: `https://shopee-space.sfo3.digitaloceanspaces.com/${bucketParams.Key}`,
       },
     });
     sendToken(user, 200, res);
@@ -217,7 +217,7 @@ exports.updateProfile = catchAsyncErrors(async (req, res, next) => {
 
       newUserData.avatar = {
         public_id: bucketParams.Key,
-        url: `https://shopee.nyc3.digitaloceanspaces.com/${bucketParams.Key}`,
+        url: `https://shopee-space.sfo3.digitaloceanspaces.com/${bucketParams.Key}`,
       };
     } catch (err) {
       const data = await s3Client.send(

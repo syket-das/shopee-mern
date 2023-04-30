@@ -37,7 +37,7 @@ exports.newProduct = catchAsyncErrors(async (req, res, next) => {
 
     imagesLinks.push({
       public_id: bucketParams.Key,
-      url: `https://shopee.nyc3.digitaloceanspaces.com/${bucketParams.Key}`,
+      url: `https://shopee-space.sfo3.digitaloceanspaces.com/${bucketParams.Key}`,
     });
   }
 
@@ -175,7 +175,7 @@ exports.updateProduct = catchAsyncErrors(async (req, res, next) => {
 
         imagesLinks.push({
           public_id: bucketParams.Key,
-          url: `https://shopee.nyc3.digitaloceanspaces.com/${bucketParams.Key}`,
+          url: `https://shopee-space.sfo3.digitaloceanspaces.com/${bucketParams.Key}`,
         });
       }
 
